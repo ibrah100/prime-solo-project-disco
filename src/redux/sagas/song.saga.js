@@ -24,8 +24,18 @@ function* sendSearchQuery (action) {
     }
 }
 
-function* searchSaga() {
+function* addSong(action){
+    try {
+      const response = yield axios.post('/api/spotify/', action.payload);
+      console.log("this is the response from server!", response); 
+    } catch (error){
+      console.log('Error with addItem in ItemTable', error)
+    }
+  }
+
+function* songSaga() {
     yield takeLatest('SAGA_FETCH_SEARCH', sendSearchQuery);
+    yield takeLatest('SAGA_ADD_SONG', addSong);
 }
 
-export default searchSaga;
+export default songSaga;

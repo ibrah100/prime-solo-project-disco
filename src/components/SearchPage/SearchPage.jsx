@@ -7,13 +7,15 @@ function SearchPage() {
 // 11. results is what we got from the index.js results reducer.
   const results = useSelector(store => store.results);
   const [searchInput, setSearchInput] = useState('');
+  const user = useSelector(store => store.user)
   const history = useHistory();
   const dispatch = useDispatch();
 
+  console.log(user);  
   console.log('Here are your results', results);
 
 // 1. Sending dispatch to SAGA_FETCH_SEARCH with searchInput 
-  const handleSubmit = (event) => {
+  const handleSearch = (event) => {
     event.preventDefault();
     
     dispatch({
@@ -23,10 +25,21 @@ function SearchPage() {
 
    
   }
+
+  const likeSong = (song) => {
+    console.log("liked this song", song)
+
+    dispatch({
+      type: 'SAGA_ADD_SONG',
+      payload: song
+    })
+  }
+
+
   return (
     <>
     <h2>SEARCH</h2>
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSearch}>
     <input
       placeholder="Search..."
       type="text"
@@ -44,6 +57,8 @@ function SearchPage() {
             <li>Song Name: {song.album.name}</li>
             <li>Artist: {song.album.artists[0].name}</li>
             <li><img src={song.album.images[2].url}></img></li>
+            <button onClick={() => likeSong(song)}>♥️</button>
+            <button>+</button>
         </ul>
         )
     })}
