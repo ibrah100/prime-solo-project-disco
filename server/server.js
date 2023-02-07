@@ -9,6 +9,13 @@ const passport = require('./strategies/user.strategy');
 
 // Route includes
 const userRouter = require('./routes/user.router');
+const spotifyRouter = require('./routes/spotify.router');
+
+// Spotify API
+const client_id = process.env.SPOTIFY_CLIENT_ID;
+const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
+const redirect_uri = process.env.REDIRECT_URI;
+
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -23,6 +30,7 @@ app.use(passport.session());
 
 /* Routes */
 app.use('/api/user', userRouter);
+app.use('/api/spotify', spotifyRouter);
 
 // Serve static files
 app.use(express.static('build'));
