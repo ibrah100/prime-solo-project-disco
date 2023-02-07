@@ -27,11 +27,17 @@ function SearchPage() {
   }
 
   const likeSong = (song) => {
-    console.log("liked this song", song)
+    
+    let likedSongData = {
+        song_id: song.id,
+        user_id: user.id
+    }
+
+    console.log("liked this song", likedSongData)
 
     dispatch({
       type: 'SAGA_ADD_SONG',
-      payload: song
+      payload: likedSongData
     })
   }
 

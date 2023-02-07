@@ -34,9 +34,21 @@ router.get('/search', useSpotifyToken, (req, res) => {
  * POST route template
  */
 router.post('/', (req, res) => {
-  // POST route code here
-  console.log("This is the song you liked from post", req.body);
-  
+  const sqlQuery = `
+    INSERT INTO "liked_songs" ("song_id", "user_id")
+    VALUES ($1, $2)
+  `;
+  const sqlValues = [req.body.song_id, req.body.user_id];
+
+  pool.query(sqlQuery, sqlValues)
+    .then((result) => {
+      console.log(`Added song into liked_song`);
+      res.sendStatus(201);
+    })
+    .catch((error) => {
+      console.error('Error POST /api/spotify', error);
+      res.sendStatus(500); 
+    })
 });
 
 module.exports = router;
