@@ -77,7 +77,8 @@ router.get('/token', (req, res) => {
 })
 
 router.get('/search', useSpotifyToken, (req, res) => {
-  const searchTerm = 'drake';
+  const searchQuery = req.query
+  console.log('do we have a search query?', searchQuery);
   const token = req.token;
 
   res.sendStatus(200);

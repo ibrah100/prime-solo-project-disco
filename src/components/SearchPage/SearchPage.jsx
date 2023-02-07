@@ -34,13 +34,6 @@ function SearchPage() {
     />
     <button>Submit</button>
   </form>
-  <div>
-    {/* 12. we take the reducer labeled results, pass it through the map function, and post it to the dom. */}
-    {results.map((image) => {
-      // 13. use src={image.images.fixed_height.url} depending on what sizes you want the images to be. Each image size has its own, unique url. Differs between APIs, this is what giphy needs. 
-        return <img key={image.id} src={image.images.fixed_height.url}></img>
-    })}
-  </div>
   </>
   
   );
