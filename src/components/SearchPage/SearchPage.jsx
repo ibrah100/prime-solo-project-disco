@@ -2,6 +2,7 @@ import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
+
 function SearchPage() {
 // 11. results is what we got from the index.js results reducer.
   const results = useSelector(store => store.results);
@@ -9,7 +10,7 @@ function SearchPage() {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  console.log(results);
+  console.log('Here are your results', results);
 
 // 1. Sending dispatch to SAGA_FETCH_SEARCH with searchInput 
   const handleSubmit = (event) => {
@@ -34,6 +35,19 @@ function SearchPage() {
     />
     <button>Submit</button>
   </form>
+  <div>
+    {results.map((song) => {
+        return (
+
+            
+        <ul key={song.id}>
+            <li>Song Name: {song.album.name}</li>
+            <li>Artist: {song.album.artists[0].name}</li>
+            <li><img src={song.album.images[2].url}></img></li>
+        </ul>
+        )
+    })}
+</div>
   </>
   
   );
