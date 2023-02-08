@@ -1,6 +1,6 @@
-const results = (state = [], action) => {
+const likes = (state = [], action) => {
     switch (action.type) {
-        case 'SET_SEARCH':
+        case 'SET_LIKES':
             console.log("this is the:", action.payload.data);
             return action.payload.data;
         default:
@@ -8,4 +8,4 @@ const results = (state = [], action) => {
     }
 } 
 
-export default results;
+export default likes;
