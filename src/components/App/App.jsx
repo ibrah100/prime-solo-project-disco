@@ -20,6 +20,7 @@ import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import SearchPage from '../SearchPage/SearchPage';
+import UserProfilePage from '../UserProfilePage/UserProfilePage';
 
 import './App.css';
 
@@ -55,6 +56,15 @@ function App() {
           >
     
             <SearchPage />
+            
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            exact
+            path="/profile"
+          >
+    
+            <UserProfilePage />
             
           </ProtectedRoute>
 

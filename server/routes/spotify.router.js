@@ -41,7 +41,8 @@ router.get('/likes', useSpotifyToken, (req, res) => {
   SELECT "song_id" FROM "liked_songs"
 	JOIN "user"
 		ON "user"."id" = "liked_songs"."user_id"
-	WHERE "liked_songs"."user_id" = $1;
+	WHERE "liked_songs"."user_id" = $1
+  ORDER BY "liked_songs"."id" DESC;
   `;
 
   pool.query(sqlQuery, [req.user.id])

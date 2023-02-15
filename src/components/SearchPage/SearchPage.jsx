@@ -10,7 +10,6 @@ function SearchPage() {
   const likes = useSelector(store => store.likes);
   const [searchInput, setSearchInput] = useState('');
   const user = useSelector(store => store.user)
-  const history = useHistory();
   const dispatch = useDispatch();
 
   console.log(user);  
@@ -51,69 +50,40 @@ function SearchPage() {
     })
   }
 
-  const deleteSong = (song) => {
-    console.log("this is song data", song);
-    
-    let deletedSongData = {
-        song_id: song.id,
-        user_id: user.id
-    }
-
-    console.log("deleted this song", deletedSongData)
-
-    dispatch({
-      type: 'SAGA_DELETE_SONG',
-      payload: deletedSongData
-    })
-  }
-
 
   return (
     <>
-    <h2>SEARCH</h2>
-    <form onSubmit={handleSearch}>
-    <input
-      placeholder="Search..."
-      type="text"
-      value={searchInput}
-      onChange={(event) => setSearchInput(event.target.value)}
-    />
-    <button>Submit</button>
-  </form>
-  <div>
-    {results.map((song) => {
-        return (
+        <h2>SEARCH</h2>
+        <form onSubmit={handleSearch}>
+            <input
+            placeholder="Search..."
+            type="text"
+            value={searchInput}
+            onChange={(event) => setSearchInput(event.target.value)}
+            />
+            <button>Submit</button>
+        </form>
+        <div>
+            {results.map((song) => {
+                return (
 
-            
-        <ul key={song.id}>
-            <li>Song Name: {song.album.name}</li>
-            <li>Artist: {song.album.artists[0].name}</li>
-            <li><img src={song.album.images[2].url}></img></li>
-            <button onClick={() => likeSong(song)}>♥️</button>
-            <button>+</button>
-        </ul>
-        )
-    })}
-    </div>
-    <div>
-    <h2>Liked Songs</h2>
-    {likes.map((song) => {
-        return (
-
-            
-        <ul key={song.id}>
-            <li>Song Name: {song.album.name}</li>
-            <li>Artist: {song.album.artists[0].name}</li>
-            <li><img src={song.album.images[2].url}></img></li>
-            <button onClick={() => deleteSong(song)}>-</button>
-        </ul>
-        )
-    })}
-</div>
-  </>
+                    
+                <ul key={song.id}>
+                    <li>Song Name: {song.name}</li>
+                    <li>Artist: {song.album.artists[0].name}</li>
+                    <li><img src={song.album.images[2].url}></img></li>
+                    <audio controls>
+                        <source src={song.preview_url}></source>
+                    </audio>
+                    <button onClick={() => likeSong(song)}>♥️</button>
+                    <a href={song.external_urls.spotify} target="_blank" rel="noopener noreferrer"><button>Open in Spotify</button></a>
+                </ul>
+                )
+            })}
+        </div>
+    </>
   
   );
 }
 
-// this allows us to use <App /> in index.js
 export default SearchPage;
