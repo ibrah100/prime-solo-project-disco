@@ -14,6 +14,8 @@ function* fetchLikedSongs(action) {
             url: '/api/spotify/likes',
             params: {userId}
         })
+
+        console.log(likedSongs)
         // Send API data to results reducer
      yield put ({
         // 9. this sets the state of the reducer with the corresponding type.
@@ -51,15 +53,34 @@ function* sendSearchQuery(action) {
 function* addSong(action){
     try {
       const response = yield axios.post('/api/spotify/add_song', action.payload);
-      console.log("this is the response from server!", response); 
+      console.log("this is the response from server!", response);
+      yield put({ type: 'SAGA_FETCH_LIKES' }) 
     } catch (error){
-      console.log('Error with addItem in ItemTable', error)
+      console.log('Error with addSong saga', error)
     }
   }
+
+  function* deleteSong(action){
+    console.log("this is action", action);
+    try {
+        const response = yield axios.delete(`/api/spotify/${action.payload.song_id}`, action.payload)
+        console.log('action.payload item.id:', action.payload.itemId)
+        console.log('action.payload user_id:', action.payload.user_id)
+        console.log('response:', response)
+    
+    
+        // yield put to bring the DOM back in sync
+        yield put({ type: 'SAGA_FETCH_LIKES' })
+      } catch (error) {
+        console.error('Error deleteItem in shelf.saga:', error)
+      }
+  }
+
 
 function* songSaga() {
     yield takeLatest('SAGA_FETCH_SEARCH', sendSearchQuery);
     yield takeLatest('SAGA_ADD_SONG', addSong);
+    yield takeLatest('SAGA_DELETE_SONG', deleteSong);
     yield takeLatest('SAGA_FETCH_LIKES', fetchLikedSongs);
 }
 

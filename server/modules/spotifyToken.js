@@ -12,16 +12,9 @@ var spotifyApi = new SpotifyWebApi({
 });
 
 const useSpotifyToken = (req, res, next) => {
-    // check if we already have a token!
-    const token = spotifyApi.getAccessToken();
+    
 
-    if (token) {
-        // attach token to the req object
-        req.token = token;
-      next();
-    } else {
-        // need to obtain a token and then attach it
-        // to the req objecet
+
         spotifyApi.clientCredentialsGrant().then(
             function(data) {
               console.log('The access token expires in ' + data.body['expires_in']);
@@ -36,7 +29,7 @@ const useSpotifyToken = (req, res, next) => {
               res.sendStatus(500);
             }
           );
-    }
+    
   };
   
   module.exports = { useSpotifyToken };

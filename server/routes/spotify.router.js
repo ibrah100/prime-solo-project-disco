@@ -5,6 +5,8 @@ const axios = require('axios');
 require('dotenv').config();
 const SpotifyWebApi = require('spotify-web-api-node');
 const { useSpotifyToken } = require('../modules/spotifyToken.js');
+const { rejectUnauthenticated } = require('../modules/authentication-middleware');
+
 
 // Searches Spotify with API, returns search results of songs
 router.get('/search', useSpotifyToken, (req, res) => {
@@ -14,7 +16,7 @@ router.get('/search', useSpotifyToken, (req, res) => {
   console.log ('This is the token:', token)
 
   axios({
-    url: `https://api.spotify.com/v1/search?q=${searchQuery}&type=track&market=US&limit=25`,
+    url: `https://api.spotify.com/v1/search?q=${searchQuery}&type=track&market=US&limit=5`,
     method: 'GET',
     headers: {
       'Accept':'application/json',
@@ -32,7 +34,7 @@ router.get('/search', useSpotifyToken, (req, res) => {
 
 // Get all liked songs from database for a specific user
 router.get('/likes', useSpotifyToken, (req, res) => {
-  console.log("user id is from:", req.query.userId);
+  console.log("user id is from:", req.user.id);
   const token = req.token;
 
   let sqlQuery = `
@@ -42,7 +44,7 @@ router.get('/likes', useSpotifyToken, (req, res) => {
 	WHERE "liked_songs"."user_id" = $1;
   `;
 
-  pool.query(sqlQuery, [req.query.userId])
+  pool.query(sqlQuery, [req.user.id])
   .then(result => {
     
     // Turning song ids into a acceptable string query for Spotify API
@@ -91,5 +93,36 @@ router.post('/add_song', (req, res) => {
       res.sendStatus(500); 
     })
 });
+
+// Delete song from client side from liked_songs database
+router.delete('/:id', rejectUnauthenticated, (req, res) => {
+  let songId = req.params.id
+  // if logged in you can access user.id
+  let userId = req.user.id
+
+  console.log("song id is:", songId, "user id is:", userId);
+
+
+
+  let sqlValues = [songId, userId]
+  let sqlQuery = `
+  DELETE FROM "liked_songs"
+	WHERE "liked_songs"."user_id" = $2
+	AND "liked_songs"."song_id" = $1`;
+
+      pool.query(sqlQuery, sqlValues)
+      .then((dbRes) => {
+        console.log('dbRes.rows', dbRes.rows)
+          res.sendStatus(200);
+      })
+      .catch((dbErr) => {
+          console.log(`error in POST: serverside`, dbErr);
+          res.sendStatus(500);
+      });
+
+
+
+    });
+
 
 module.exports = router;

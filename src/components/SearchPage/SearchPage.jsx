@@ -34,7 +34,6 @@ function SearchPage() {
       payload: searchInput
     })
 
-   
   }
 
   const likeSong = (song) => {
@@ -49,6 +48,22 @@ function SearchPage() {
     dispatch({
       type: 'SAGA_ADD_SONG',
       payload: likedSongData
+    })
+  }
+
+  const deleteSong = (song) => {
+    console.log("this is song data", song);
+    
+    let deletedSongData = {
+        song_id: song.id,
+        user_id: user.id
+    }
+
+    console.log("deleted this song", deletedSongData)
+
+    dispatch({
+      type: 'SAGA_DELETE_SONG',
+      payload: deletedSongData
     })
   }
 
@@ -90,8 +105,7 @@ function SearchPage() {
             <li>Song Name: {song.album.name}</li>
             <li>Artist: {song.album.artists[0].name}</li>
             <li><img src={song.album.images[2].url}></img></li>
-            <button onClick={() => likeSong(song)}>♥️</button>
-            <button>+</button>
+            <button onClick={() => deleteSong(song)}>-</button>
         </ul>
         )
     })}
