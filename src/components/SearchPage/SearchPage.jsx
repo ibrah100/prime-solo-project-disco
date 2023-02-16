@@ -11,9 +11,6 @@ function SearchPage() {
   const user = useSelector(store => store.user)
   const dispatch = useDispatch();
   const history = useHistory();
-
-  console.log(user);  
-  console.log('Here are your results', results);
   
 
 // 1. Sending dispatch to SAGA_FETCH_SEARCH with searchInput 
@@ -45,9 +42,13 @@ function SearchPage() {
   }
 
   const postSong = (song) => {
+    
     let postSongData = {
         song_id: song.id,
-        user_id: user.id
+        user_id: user.id,
+        song_name: song.name,
+        artist_name: song.album.artists[0].name,
+        song_image: song.album.images[2].url
     }
 
     console.log("This is the song you want to post:", postSongData)

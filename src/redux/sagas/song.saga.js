@@ -27,6 +27,8 @@ function* fetchLikedSongs(action) {
     }
 }
 
+
+
 function* sendSearchQuery(action) {
     // 3. send search takes the dispatch from 'SAGA_FETCH_SEARCH', and supplying the function with the search term.
     try{

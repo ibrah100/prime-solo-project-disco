@@ -5,6 +5,7 @@ import { useState } from "react";
 function PostPage() {
     const postData = useSelector((store) => store.postData);
     const [postInput, setPostInput] = useState('');
+    const dispatch = useDispatch();
 
     let userPost = {
         user_id: postData.user_id,
