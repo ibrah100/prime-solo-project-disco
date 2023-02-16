@@ -58,9 +58,9 @@ function* addSong(action){
     } catch (error){
       console.log('Error with addSong saga', error)
     }
-  }
+}
 
-  function* deleteSong(action){
+function* deleteSong(action){
     console.log("this is action", action);
     try {
         const response = yield axios.delete(`/api/spotify/${action.payload.song_id}`, action.payload)
@@ -74,13 +74,28 @@ function* addSong(action){
       } catch (error) {
         console.error('Error deleteItem in shelf.saga:', error)
       }
-  }
+}
+
+function* postSong(action){
+    try {
+        const postSongData = action.payload;
+        yield put ({
+        type: 'SET_POST',
+        payload: postSongData
+        })
+    } catch (error){
+      console.log('Error with addSong saga', error)
+    }
+}
+
+
 
 
 function* songSaga() {
     yield takeLatest('SAGA_FETCH_SEARCH', sendSearchQuery);
     yield takeLatest('SAGA_ADD_SONG', addSong);
     yield takeLatest('SAGA_DELETE_SONG', deleteSong);
+    yield takeLatest('SAGA_POST_SONG', postSong);
     yield takeLatest('SAGA_FETCH_LIKES', fetchLikedSongs);
 }
 

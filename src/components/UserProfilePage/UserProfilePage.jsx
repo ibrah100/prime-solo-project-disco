@@ -7,6 +7,8 @@ function UserProfilePage() {
   const likes = useSelector((store) => store.likes);
   const dispatch = useDispatch();
 
+  console.log("Here are the likes", likes);
+
 
   useEffect(() => {
     dispatch({

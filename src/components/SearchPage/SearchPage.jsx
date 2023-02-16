@@ -1,5 +1,5 @@
 import { useHistory } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 
@@ -7,22 +7,14 @@ import { useSelector, useDispatch } from "react-redux";
 function SearchPage() {
 // 11. results is what we got from the index.js results reducer.
   const results = useSelector(store => store.results);
-  const likes = useSelector(store => store.likes);
   const [searchInput, setSearchInput] = useState('');
   const user = useSelector(store => store.user)
   const dispatch = useDispatch();
+  const history = useHistory();
 
   console.log(user);  
   console.log('Here are your results', results);
-
-  useEffect(() => {
-    dispatch({
-      type: 'SAGA_FETCH_LIKES',
-      payload: user.id
-    })
-  }, [])
-
-  console.log("Here are the likes", likes);
+  
 
 // 1. Sending dispatch to SAGA_FETCH_SEARCH with searchInput 
   const handleSearch = (event) => {
@@ -48,6 +40,24 @@ function SearchPage() {
       type: 'SAGA_ADD_SONG',
       payload: likedSongData
     })
+
+    
+  }
+
+  const postSong = (song) => {
+    let postSongData = {
+        song_id: song.id,
+        user_id: user.id
+    }
+
+    console.log("This is the song you want to post:", postSongData)
+
+    dispatch({
+        type: 'SAGA_POST_SONG',
+        payload: postSongData
+      })
+
+    history.push('/post');
   }
 
 
@@ -77,6 +87,7 @@ function SearchPage() {
                     </audio>
                     <button onClick={() => likeSong(song)}>♥️</button>
                     <a href={song.external_urls.spotify} target="_blank" rel="noopener noreferrer"><button>Open in Spotify</button></a>
+                    <button onClick={() => postSong(song)}>Post</button>
                 </ul>
                 )
             })}
