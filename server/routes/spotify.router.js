@@ -80,7 +80,7 @@ router.get('/likes', useSpotifyToken, (req, res) => {
 router.get('/feed', (req, res) => {
 
   let sqlQuery = `
-  SELECT posts.id, post_text, song_name, artist_name, song_image, spotify_url, user_id, username, spotify_song_id FROM "posts"
+  SELECT posts.id, post_text, song_name, artist_name, song_image, spotify_url, user_id, username, spotify_song_id, song_audio FROM "posts"
 	JOIN "user"
 		ON "user"."id" = "posts"."user_id"
 	ORDER BY "created_at" DESC;
