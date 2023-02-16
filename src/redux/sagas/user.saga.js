@@ -24,8 +24,29 @@ function* fetchUser() {
   }
 }
 
+function* fetchOtherUser(action){
+  try {
+    
+    const otherUserId = action.payload;
+    console.log(otherUserId);
+
+    const response = yield  axios({
+      method:  'GET',
+      url: '/api/user/other',
+      params: otherUserId
+    })
+
+    
+    console.log(response);
+  } catch (error) {
+    console.log('User get request failed', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
+  yield takeLatest('FETCH_OTHER_USER', fetchOtherUser);
+
 }
 
 export default userSaga;

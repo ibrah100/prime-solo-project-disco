@@ -5,6 +5,7 @@ import results from './results.reducer';
 import likes from './likes.reducer';
 import postData from './post.reducer';
 import feed from './feed.reducer';
+import otherUser from './other_user.reducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   results,
   likes,
   postData,
-  feed
+  feed,
+  otherUser
 });
 
 export default rootReducer;

@@ -14,6 +14,27 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
 
+// Get all posts for feed
+router.get('/other', (req, res) => {
+
+  console.log("user router", req.body);
+
+  let sqlQuery = `
+  SELECT * FROM "user"
+  WHERE "id" = $1;
+  `;
+
+  // pool.query(sqlQuery)
+  //   .then((result) => {
+  //     console.log("this is database response", result.rows);
+  //     res.send(result.rows);
+  //   }).catch((error) => {
+  //     console.error('Error GET /api/spotify/posts', error);
+  //     res.sendStatus(500);  
+  //   });
+
+});
+
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted

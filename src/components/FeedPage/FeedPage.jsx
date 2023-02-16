@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import {useSelector, useDispatch} from 'react-redux';
 
-function UserPage() {
+function FeedPage() {
   const feed = useSelector((store) => store.feed);
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
@@ -30,6 +30,14 @@ function UserPage() {
     
   }
 
+  const handleProfileClick = (id) => {
+    dispatch({
+      type: 'FETCH_OTHER_USER',
+      payload: id
+    })
+  }
+
+
   
   return (
     <div>
@@ -37,7 +45,7 @@ function UserPage() {
             return (
                 <div key={post.id}>
                     <hr></hr>
-                    <p>Username: @{post.username}</p>
+                    <p onClick={() => handleProfileClick(post.user_id)}>Username: @{post.username}</p>
                     <p>Caption: "{post.post_text}"</p>
                     <p>Song Name: {post.song_name}</p>
                     <p>Artist: {post.artist_name}</p>
@@ -58,4 +66,4 @@ function UserPage() {
 }
 
 // this allows us to use <App /> in index.js
-export default UserPage;
+export default FeedPage;

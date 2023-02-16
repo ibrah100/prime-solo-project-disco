@@ -2,12 +2,12 @@ import {useSelector, useDispatch} from 'react-redux';
 import { useEffect } from "react";
 
 
-function UserProfilePage() {
+function OtherProfilePage() {
   const user = useSelector((store) => store.user);
   const likes = useSelector((store) => store.likes);
   const dispatch = useDispatch();
 
-  console.log("Here are the user", user);
+  console.log("Here is the user", user);
 
 
   useEffect(() => {
@@ -17,21 +17,6 @@ function UserProfilePage() {
     })
   }, [])
 
-  const deleteSong = (song) => {
-    console.log("this is song data", song);
-
-    let deletedSongData = {
-        song_id: song.id,
-        user_id: user.id
-    }
-
-    console.log("deleted this song", deletedSongData)
-
-    dispatch({
-      type: 'SAGA_DELETE_SONG',
-      payload: deletedSongData
-    })
-  }
 
   return (
     <>
@@ -58,4 +43,4 @@ function UserProfilePage() {
 }
 
 // this allows us to use <App /> in index.js
-export default UserProfilePage;
+export default OtherProfilePage;
