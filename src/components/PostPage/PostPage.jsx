@@ -1,28 +1,34 @@
 import {useSelector, useDispatch} from 'react-redux';
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
+
 
 
 function PostPage() {
     const postData = useSelector((store) => store.postData);
     const [postInput, setPostInput] = useState('');
     const dispatch = useDispatch();
+    const history = useHistory();
 
-    let userPost = {
-        user_id: postData.user_id,
-        song_id: postData.song_id,
-        post_text: postInput
-    }
+
+
+    console.log("post data:", postData);
 
 
     const handlePost = (event) => {
         event.preventDefault();
 
-        console.log('handle post data:', userPost);
-        
-        // dispatch({
-        //   type: 'SAGA_CREATE_POST',
-        //   payload: userPost
-        // })
+        postData.post_text = postInput;
+
+
+        console.log("full user post data", postData);
+
+        dispatch({
+            type: 'SAGA_POST_SONG',
+            payload: postData
+        })
+
+        history.push("/search");
     
       }
 
@@ -37,6 +43,9 @@ function PostPage() {
             />
             <button>POST</button>
             </form>
+            <p>Song Name: {postData.song_name}</p>
+            <p>Artist Name: {postData.artist_name}</p>
+            <img src={postData.song_image}></img>
         </div>
     );
 }

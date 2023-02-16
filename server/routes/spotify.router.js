@@ -76,6 +76,27 @@ router.get('/likes', useSpotifyToken, (req, res) => {
 
 });
 
+// Get all posts for feed
+router.get('/feed', (req, res) => {
+
+  let sqlQuery = `
+  SELECT posts.id, post_text, song_name, artist_name, song_image, spotify_url, user_id, username, spotify_song_id FROM "posts"
+	JOIN "user"
+		ON "user"."id" = "posts"."user_id"
+	ORDER BY "created_at" DESC;
+  `;
+
+  pool.query(sqlQuery)
+    .then((result) => {
+      console.log("this is database response", result.rows);
+      res.send(result.rows);
+    }).catch((error) => {
+      console.error('Error GET /api/spotify/posts', error);
+      res.sendStatus(500);  
+    });
+
+});
+
 // Adds liked song from client side to liked_songs database
 router.post('/add_song', (req, res) => {
   const sqlQuery = `
@@ -87,6 +108,28 @@ router.post('/add_song', (req, res) => {
   pool.query(sqlQuery, sqlValues)
     .then((result) => {
       console.log(`Added song into liked_songs`);
+      res.sendStatus(201);
+    })
+    .catch((error) => {
+      console.error('Error POST /api/spotify', error);
+      res.sendStatus(500); 
+    })
+});
+
+// Post song with caption to be displayed in feed
+router.post('/post/song', (req, res) => {
+
+  console.log("req", req.body)
+  const sqlQuery = `
+    INSERT INTO "posts" ("post_text", "song_name", "artist_name", "song_image", "spotify_url", "song_audio", "user_id", "spotify_song_id")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
+  `;
+  
+  const sqlValues = [req.body.post_text, req.body.song_name, req.body.artist_name, req.body.song_image, req.body.spotify_url, req.body.song_audio, req.body.user_id, req.body.song_id];
+
+  pool.query(sqlQuery, sqlValues)
+    .then((result) => {
+      console.log(`Added into posts`, result);
       res.sendStatus(201);
     })
     .catch((error) => {

@@ -27,6 +27,27 @@ function* fetchLikedSongs(action) {
     }
 }
 
+function* fetchFeed(action) {
+    
+    try {
+        
+        const feedPosts = yield  axios({
+            method:  'GET',
+            url: '/api/spotify/feed',
+        })
+
+        console.log("feedpost", feedPosts);
+
+     yield put ({
+        type: 'SET_FEED',
+        payload: feedPosts
+        })
+
+    } catch (error) {
+        console.log(`fetchLikedSongs broke POST saga index`, error);
+    }
+}
+
 
 
 function* sendSearchQuery(action) {
@@ -66,7 +87,7 @@ function* deleteSong(action){
     console.log("this is action", action);
     try {
         const response = yield axios.delete(`/api/spotify/${action.payload.song_id}`, action.payload)
-        console.log('action.payload item.id:', action.payload.itemId)
+        console.log('action.payload song_id:', action.payload.song_id)
         console.log('action.payload user_id:', action.payload.user_id)
         console.log('response:', response)
     
@@ -81,15 +102,32 @@ function* deleteSong(action){
 function* postSong(action){
     try {
         const postSongData = action.payload;
-        yield put ({
-        type: 'SET_POST',
-        payload: postSongData
-        })
+        
+        const response = yield axios.post('/api/spotify/post/song', postSongData);
+        console.log("this is the response:", response)
+
+        yield put({ type: 'SAGA_FETCH_FEED' })
+
+        
     } catch (error){
       console.log('Error with addSong saga', error)
     }
 }
 
+function* postSongData(action){
+    try {
+        const postSongData = action.payload;
+        console.log("post songdata:", postSongData);
+        
+        yield put ({
+        type: 'SET_POST',
+        payload: postSongData
+        })
+            
+    } catch (error){
+      console.log('Error with addSong saga', error)
+    }
+}
 
 
 
@@ -98,7 +136,10 @@ function* songSaga() {
     yield takeLatest('SAGA_ADD_SONG', addSong);
     yield takeLatest('SAGA_DELETE_SONG', deleteSong);
     yield takeLatest('SAGA_POST_SONG', postSong);
+    yield takeLatest('SAGA_POST_SONG_DATA', postSongData);
     yield takeLatest('SAGA_FETCH_LIKES', fetchLikedSongs);
+    yield takeLatest('SAGA_FETCH_FEED', fetchFeed);
+
 }
 
 export default songSaga;

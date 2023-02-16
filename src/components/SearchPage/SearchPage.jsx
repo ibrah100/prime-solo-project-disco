@@ -48,13 +48,15 @@ function SearchPage() {
         user_id: user.id,
         song_name: song.name,
         artist_name: song.album.artists[0].name,
-        song_image: song.album.images[2].url
+        song_image: song.album.images[2].url,
+        spotify_url: song.external_urls.spotify,
+        song_audio: song.preview_url,
     }
 
     console.log("This is the song you want to post:", postSongData)
 
     dispatch({
-        type: 'SAGA_POST_SONG',
+        type: 'SAGA_POST_SONG_DATA',
         payload: postSongData
       })
 
@@ -78,18 +80,22 @@ function SearchPage() {
             {results.map((song) => {
                 return (
 
-                    
+            
                 <ul key={song.id}>
+                    <hr></hr>
                     <li>Song Name: {song.name}</li>
                     <li>Artist: {song.album.artists[0].name}</li>
                     <li><img src={song.album.images[2].url}></img></li>
                     <audio controls>
                         <source src={song.preview_url}></source>
                     </audio>
+                    <br></br>
                     <button onClick={() => likeSong(song)}>♥️</button>
                     <a href={song.external_urls.spotify} target="_blank" rel="noopener noreferrer"><button>Open in Spotify</button></a>
                     <button onClick={() => postSong(song)}>Post</button>
+                    <hr></hr>
                 </ul>
+                
                 )
             })}
         </div>
