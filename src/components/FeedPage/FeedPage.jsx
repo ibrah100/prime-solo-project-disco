@@ -35,17 +35,21 @@ function FeedPage() {
   }
 
   const handleProfileClick = (id) => {
-    dispatch({
-      type: 'FETCH_OTHER_USER',
-      payload: id
-    })
+    if (id === user.id){
+      history.push("/profile")
+    } else {
+      dispatch({
+        type: 'FETCH_OTHER_USER',
+        payload: id
+      })
 
-    dispatch({
-      type: 'SAGA_FETCH_OTHER_LIKES',
-      payload: otherUser.id
-    })
+      dispatch({
+        type: 'SAGA_FETCH_OTHER_LIKES',
+        payload: otherUser.id
+      })
 
-    history.push("/other");
+      history.push("/other");
+    }
   }
 
 
