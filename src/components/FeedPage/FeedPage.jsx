@@ -1,10 +1,14 @@
 import { useEffect } from "react";
 import {useSelector, useDispatch} from 'react-redux';
+import { useHistory } from "react-router-dom";
+
 
 function FeedPage() {
   const feed = useSelector((store) => store.feed);
   const user = useSelector((store) => store.user);
+  const otherUser = useSelector((store) => store.otherUser);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   console.log("test feed", feed);
 
@@ -35,6 +39,13 @@ function FeedPage() {
       type: 'FETCH_OTHER_USER',
       payload: id
     })
+
+    dispatch({
+      type: 'SAGA_FETCH_OTHER_LIKES',
+      payload: otherUser.id
+    })
+
+    history.push("/other");
   }
 
 

@@ -3,17 +3,17 @@ import { useEffect } from "react";
 
 
 function OtherProfilePage() {
-  const user = useSelector((store) => store.user);
-  const likes = useSelector((store) => store.likes);
+  const otherUser = useSelector((store) => store.otherUser);
+  const otherLikes = useSelector((store) => store.otherLikes);
   const dispatch = useDispatch();
 
-  console.log("Here is the user", user);
+
 
 
   useEffect(() => {
     dispatch({
-      type: 'SAGA_FETCH_LIKES',
-      payload: user.id
+      type: 'SAGA_FETCH_OTHER_LIKES',
+      payload: otherUser.id
     })
   }, [])
 
@@ -21,13 +21,13 @@ function OtherProfilePage() {
   return (
     <>
         <div className="container">
-        <h2>@{user.username}</h2>
-        <p>Your ID is: {user.id}</p>
-        <img src={user.profile_pic} width='64' ></img>
-        <p>BIO: {user.bio}</p>
+        <h2>@{otherUser.username}</h2>
+        <p>Your ID is: {otherUser.id}</p>
+        <img src={otherUser.profile_pic} width='64' ></img>
+        <p>BIO: {otherUser.bio}</p>
         </div>
         <h2>Liked Songs</h2>
-        {likes.map((song) => {
+        {otherLikes.map((song) => {
             return (
                 <ul key={song.id}>
                     <li>Song Name: {song.name}</li>

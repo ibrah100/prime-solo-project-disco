@@ -32,9 +32,9 @@ router.get('/search', useSpotifyToken, (req, res) => {
   
 })
 
-// Get all liked songs from database for a specific user
+// Get all liked songs from database for current user
 router.get('/likes', useSpotifyToken, (req, res) => {
-  console.log("user id is from:", req.user.id);
+  console.log("user id is from current:", req.user.id);
   const token = req.token;
 
   let sqlQuery = `
@@ -51,8 +51,6 @@ router.get('/likes', useSpotifyToken, (req, res) => {
     // Turning song ids into a acceptable string query for Spotify API
     const likedSongsIdsQuery = result.rows.map(({song_id}) => song_id).join('%2C')
     
-    console.log("GET - All songs ids:", likedSongsIdsQuery);
-
     axios({
       url: `https://api.spotify.com/v1/tracks?ids=${likedSongsIdsQuery}`,
       method: 'GET',
@@ -62,6 +60,52 @@ router.get('/likes', useSpotifyToken, (req, res) => {
         'Authorization': `Bearer ${token}` 
       },
     }).then((response) => {
+      res.send(response.data.tracks)
+    }).catch((error) => {
+      console.log('GET /api/spotify/likes server side fail:', error);
+      res.sendStatus(500);
+    });
+    
+    
+  }).catch(error => {
+    console.log('ERROR in /api/spotify/likes GET route', error);
+    res.sendStatus(500)
+  })
+
+});
+
+// Get all liked songs for other users when viewing profile
+router.get('/other/likes', useSpotifyToken, (req, res) => {
+  const otherUserId = req.query.otherUserId;
+  console.log("user id is from other:", otherUserId);
+  const token = req.token;
+
+  let sqlQuery = `
+  SELECT "song_id" FROM "liked_songs"
+	JOIN "user"
+		ON "user"."id" = "liked_songs"."user_id"
+	WHERE "liked_songs"."user_id" = $1
+  ORDER BY "liked_songs"."id" DESC;
+  `;
+
+  pool.query(sqlQuery, [otherUserId])
+  .then(result => {
+    
+    // Turning song ids into a acceptable string query for Spotify API
+    const otherLikedSongsIdsQuery = result.rows.map(({song_id}) => song_id).join('%2C')
+    console.log(otherLikedSongsIdsQuery)
+    
+    
+    axios({
+      url: `https://api.spotify.com/v1/tracks?ids=${otherLikedSongsIdsQuery}`,
+      method: 'GET',
+      headers: {
+        'Accept':'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      },
+    }).then((response) => {
+      console.log(response.data.tracks)
       res.send(response.data.tracks)
     }).catch((error) => {
       console.log('GET /api/spotify/likes server side fail:', error);
@@ -88,7 +132,6 @@ router.get('/feed', (req, res) => {
 
   pool.query(sqlQuery)
     .then((result) => {
-      console.log("this is database response", result.rows);
       res.send(result.rows);
     }).catch((error) => {
       console.error('Error GET /api/spotify/posts', error);

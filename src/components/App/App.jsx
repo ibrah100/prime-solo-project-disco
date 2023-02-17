@@ -22,6 +22,7 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 import SearchPage from '../SearchPage/SearchPage';
 import UserProfilePage from '../UserProfilePage/UserProfilePage';
 import PostPage from '../PostPage/PostPage';
+import OtherProfilePage from '../OtherProfilePage/OtherProfilePage';
 
 import './App.css';
 
@@ -61,6 +62,10 @@ function App() {
 
           <ProtectedRoute exact path="/post">
             <PostPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path="/other">
+            <OtherProfilePage />
           </ProtectedRoute>
 
           {/* For protected routes, the view could show one of several things on the same route.

@@ -33,11 +33,10 @@ function* fetchOtherUser(action){
     const response = yield  axios({
       method:  'GET',
       url: '/api/user/other',
-      params: otherUserId
+      params: {otherUserId}
     })
 
-    
-    console.log(response);
+    yield put({ type: 'SET_OTHER_USER', payload: response.data[0] });
   } catch (error) {
     console.log('User get request failed', error);
   }

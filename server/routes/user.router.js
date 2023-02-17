@@ -17,21 +17,21 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 // Get all posts for feed
 router.get('/other', (req, res) => {
 
-  console.log("user router", req.body);
+  const otherUserId = req.query.otherUserId;
 
   let sqlQuery = `
   SELECT * FROM "user"
   WHERE "id" = $1;
   `;
 
-  // pool.query(sqlQuery)
-  //   .then((result) => {
-  //     console.log("this is database response", result.rows);
-  //     res.send(result.rows);
-  //   }).catch((error) => {
-  //     console.error('Error GET /api/spotify/posts', error);
-  //     res.sendStatus(500);  
-  //   });
+  pool.query(sqlQuery, [otherUserId])
+    .then((result) => {
+      console.log("this is database response", result.rows);
+      res.send(result.rows);
+    }).catch((error) => {
+      console.error('Error GET /api/spotify/posts', error);
+      res.sendStatus(500);  
+    });
 
 });
 

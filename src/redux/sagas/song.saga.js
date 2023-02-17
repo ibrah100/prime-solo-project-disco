@@ -27,7 +27,33 @@ function* fetchLikedSongs(action) {
     }
 }
 
-function* fetchFeed(action) {
+function* fetchOthersLikedSongs(action) {
+    // 3. send search takes the dispatch from 'SAGA_FETCH_SEARCH', and supplying the function with the search term.
+    try{
+        // 4. assigns the term to the searchQuery variable.
+        const otherUserId = action.payload;
+    
+        
+        // 5. set params with the variable of searchQuery as an object.
+        const response = yield  axios({
+            method:  'GET',
+            url: '/api/spotify/other/likes',
+            params: {otherUserId}
+        })
+
+        console.log("this is server response", response)
+        // Send API data to results reducer
+     yield put ({
+        // 9. this sets the state of the reducer with the corresponding type.
+        type: 'SET_OTHER_LIKES',
+        payload: response
+        })
+    }catch (error){
+        console.log(`fetchOtherLikedSongs broke POST saga index`, error);
+    }
+}
+
+function* fetchFeed() {
     
     try {
         
@@ -138,6 +164,7 @@ function* songSaga() {
     yield takeLatest('SAGA_POST_SONG', postSong);
     yield takeLatest('SAGA_POST_SONG_DATA', postSongData);
     yield takeLatest('SAGA_FETCH_LIKES', fetchLikedSongs);
+    yield takeLatest('SAGA_FETCH_OTHER_LIKES', fetchOthersLikedSongs);
     yield takeLatest('SAGA_FETCH_FEED', fetchFeed);
 
 }
