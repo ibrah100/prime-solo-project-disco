@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import {useSelector, useDispatch} from 'react-redux';
 import { useHistory } from "react-router-dom";
+import { Card, CardHeader, CardContent, Avatar, Typography, Grid,} from '@mui/material';
 
 
 function FeedPage() {
@@ -56,7 +57,43 @@ function FeedPage() {
   
   return (
     <div>
-       {feed.map((post) => {
+      <Grid container spacing={2}>
+        {feed.map((post) => (
+          <Grid item xs={12} key={post.id}>
+            <Card>
+              <CardHeader
+                avatar={
+                  <Avatar src={post.profile_pic} alt={post.username} onClick={() => handleProfileClick(post.user_id)}/>
+                }
+                title={post.username}
+              />
+              <CardContent>
+                <Typography>
+                  "{post.post_text}"
+                </Typography>
+              </CardContent>
+              <CardContent>
+              <Typography>
+                  {post.song_name}
+                </Typography>
+                <Typography>
+                  {post.artist_name}
+                </Typography>
+                <img src={post.song_image}></img>
+                <audio controls>
+                  <source src={post.song_audio}></source>
+                </audio>
+                <button onClick={() => likeSong(post)}>♥️</button>
+                <a href={post.spotify_url} target="_blank" rel="noopener noreferrer"><button>Open in Spotify</button></a>
+                
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </div>
+  );
+       {/* {feed.map((post) => {
             return (
                 <div key={post.id}>
                     <hr></hr>
@@ -74,10 +111,8 @@ function FeedPage() {
                     <hr></hr>
                 </div>
             )
-        })}
+        })} */}
 
-    </div>
-  );
 }
 
 // this allows us to use <App /> in index.js

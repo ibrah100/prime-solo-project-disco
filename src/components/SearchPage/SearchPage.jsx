@@ -1,6 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Card, CardHeader, CardContent, Avatar, Typography, Grid,} from '@mui/material';
 
 
 
@@ -77,27 +78,30 @@ function SearchPage() {
             <button>Submit</button>
         </form>
         <div>
-            {results.map((song) => {
-                return (
+            <Grid container spacing={2}>
+                {results.map((song) => (
+                    <Card>
+                        <CardContent>
+                            <Typography>
+                                {song.name}
+                            </Typography>
+                            <Typography>
+                                {song.album.artists[0].name}
+                            </Typography>
+                            <img src={song.album.images[2].url}></img>
+                            <audio controls>
+                                <source src={song.preview_url}></source>
+                            </audio>
+                            <button onClick={() => likeSong(song)}>♥️</button>
+                            <a href={song.external_urls.spotify} target="_blank" rel="noopener noreferrer"><button>Open in Spotify</button></a>
+                            <button onClick={() => postSong(song)}>Post</button>
+                        </CardContent>
+                    </Card>
 
-            
-                <ul key={song.id}>
-                    <hr></hr>
-                    <li>Song Name: {song.name}</li>
-                    <li>Artist: {song.album.artists[0].name}</li>
-                    <li><img src={song.album.images[2].url}></img></li>
-                    <audio controls>
-                        <source src={song.preview_url}></source>
-                    </audio>
-                    <br></br>
-                    <button onClick={() => likeSong(song)}>♥️</button>
-                    <a href={song.external_urls.spotify} target="_blank" rel="noopener noreferrer"><button>Open in Spotify</button></a>
-                    <button onClick={() => postSong(song)}>Post</button>
-                    <hr></hr>
-                </ul>
-                
-                )
-            })}
+                ))}
+        
+            </Grid>
+
         </div>
     </>
   

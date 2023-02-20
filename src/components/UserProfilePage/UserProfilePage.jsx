@@ -1,5 +1,7 @@
 import {useSelector, useDispatch} from 'react-redux';
 import { useEffect } from "react";
+import { Card, CardHeader, CardContent, Avatar, Typography, Grid,} from '@mui/material';
+
 
 
 function UserProfilePage() {
@@ -37,22 +39,30 @@ function UserProfilePage() {
     <>
         <div className="container">
         <h2>@{user.username}</h2>
-        <p>Your ID is: {user.id}</p>
         <img src={user.profile_pic} width='64' ></img>
-        <p>BIO: {user.bio}</p>
+        <p>BIO:</p>
+        <p>{user.bio}</p>
         </div>
         <h2>Liked Songs</h2>
-        {likes.map((song) => {
-            return (
-                <ul key={song.id}>
-                    <li>Song Name: {song.name}</li>
-                    <li>Artist: {song.album.artists[0].name}</li>
-                    <li><img src={song.album.images[2].url}></img></li>
-                    <button onClick={() => deleteSong(song)}>-</button>
-                    <a href={song.external_urls.spotify} target="_blank" rel="noopener noreferrer"><button>Open in Spotify</button></a>
-                </ul>
-            )
-        })}
+        <Grid container spacing={2}>
+          {likes.map((song) => (
+            <Grid item xs={12} key= {song.id}>
+              <Card>
+                <CardContent>
+                  <Typography>
+                    {song.name}
+                  </Typography>
+                  <Typography>
+                    {song.album.artists[0].name}
+                  </Typography>
+                  <img src={song.album.images[2].url}></img>
+                  <button onClick={() => deleteSong(song)}>-</button>
+                  <a href={song.external_urls.spotify} target="_blank" rel="noopener noreferrer"><button>Open in Spotify</button></a>
+                </CardContent>
+              </Card>
+            </Grid>  
+          ))}
+        </Grid>
     </>
   );
 }
